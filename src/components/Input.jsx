@@ -105,6 +105,11 @@ export default function Input({
           <></>
         )}
       </div>
+      {hint && type === "number" && (
+        <p className={`${error ? "text-error" : "text-blur"} text-xs`}>
+          Only accept number
+        </p>
+      )}
       {hint && type !== "password" && (
         <p
           className={`${error ? "text-error" : "text-blur"}
