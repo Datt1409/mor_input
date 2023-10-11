@@ -64,8 +64,6 @@ export default function Input({
 
     if (type === "number") {
       const newNumberValue = Number(event.target.value);
-      console.log(newNumberValue);
-
       newNumberValue !== 0 ? setIsValid(true) : setIsValid(false);
 
       setNumberValue(newNumberValue);
