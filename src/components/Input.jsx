@@ -106,12 +106,12 @@ export default function Input({
           placeholder={type === "number" ? 0 : `${placeholder}`}
           className={`${showIcon ? "pl-12" : ""}
               ${
-                isFocus && !isValid
+                error
+                  ? "border-error border-3"
+                  : isFocus && !isValid
                   ? `border-${color} border-3`
                   : isFocus && isValid
                   ? "!border-success"
-                  : error
-                  ? "border-error border-3"
                   : "border-blur"
               }
               ${disabled ? "bg-disabled text-dark" : ""}
