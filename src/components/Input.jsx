@@ -118,11 +118,7 @@ export default function Input({
            border-2 w-full p-3 rounded-lg placeholder:text-blur text-base`}
           onChange={handleChange}
           disabled={disabled}
-          onFocus={() => {
-            setIsFocus(true);
-            console.log("isFocus", isFocus);
-            console.log("isValid", isValid);
-          }}
+          onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
         />
 
