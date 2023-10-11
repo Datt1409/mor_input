@@ -18,4 +18,10 @@ module.exports = {
     },
   },
   plugins: [],
+  safelist: [
+    {
+      pattern:
+        /(bg|text|border)-(primaryBlue|blur|error|disabled|success|dark)/,
+    },
+  ],
 };

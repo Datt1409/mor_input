@@ -78,7 +78,7 @@ export default function Input({
           error
             ? "text-error font-bold"
             : isFocus && !isValid
-            ? `text-primaryBlue`
+            ? `text-${color}`
             : isValid && isFocus
             ? "text-success"
             : ""
