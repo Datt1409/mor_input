@@ -11,7 +11,7 @@ export default function Input({
   label = "Label",
   required = false,
   error = false,
-  color = "primary",
+  color = "primaryBlue",
   placeholder = "Placeholder",
 }) {
   const [isFocus, setIsFocus] = useState(false);
@@ -33,7 +33,7 @@ export default function Input({
   return (
     <div className="w-96 flex flex-col gap-3">
       <div
-        className={`${error ? "text-danger" : "text-blur"}
+        className={`${error ? "text-error" : "text-blur"}
             ${isValid ? "text-success" : "text-blur"}
             ${isFocus ? `text-${color}` : "text-blur"}            
         font-nornal relative text-sm`}
@@ -69,7 +69,7 @@ export default function Input({
           placeholder={type === "number" ? 0 : `${placeholder}`}
           className={`${icon ? "pl-12" : ""}
               ${isFocus ? `border-${color}` : "border-blur"}
-              ${error ? "border-danger" : "border-blur"}
+              ${error ? "border-error" : "border-blur"}
               ${isValid ? "border-success border-2" : "border-blur"}
               ${disabled ? "bg-disabled text-dark" : ""}
            border w-full p-3 rounded-lg placeholder:text-blur text-base`}
@@ -107,7 +107,7 @@ export default function Input({
       </div>
       {hint && type !== "password" && (
         <p
-          className={`${error ? "text-danger" : "text-blur"}
+          className={`${error ? "text-error" : "text-blur"}
             ${isValid ? "text-success" : "text-blur"}
           text-xs`}
         >
@@ -121,7 +121,7 @@ export default function Input({
           least a <span className="text-success">Capital Letter</span>, a{" "}
           <span
             className={`${isValid ? "text-success" : ""}  ${
-              error ? "text-danger" : ""
+              error ? "text-error" : ""
             }  ${isFocus ? "text-black" : ""}`}
           >
             Number
@@ -129,7 +129,7 @@ export default function Input({
           and a{" "}
           <span
             className={`${isValid ? "text-success" : ""} ${
-              error ? "text-danger" : ""
+              error ? "text-error" : ""
             } ${isFocus ? "text-black" : ""}`}
           >
             Special Character
