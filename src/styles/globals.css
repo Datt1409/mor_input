@@ -8,18 +8,6 @@ input[type="number"]:not([step="any"])::-webkit-outer-spin-button {
   cursor: pointer;
 }
 
-/* .text-info {
-  color: #5570f1;
+input:focus {
+  outline: none;
 }
-
-.text-negative {
-  color: #f57e77;
-}
-
-.border-info {
-  border: #5570f1 1px solid;
-}
-
-.border-negative {
-  border: #f57e77 1px solid;
-} */
