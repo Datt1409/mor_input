@@ -68,7 +68,6 @@ export default function Input({
 
       setNumberValue(newNumberValue);
     }
-
     setInputValue(newInputValue);
   };
 
@@ -109,10 +108,10 @@ export default function Input({
               ${
                 error
                   ? "border-error border-3"
+                  : isFocus && isValid
+                  ? "!border-success"
                   : isFocus && !isValid
                   ? `border-${color} border-3`
-                  : isValid && isFocus
-                  ? "!border-success"
                   : "border-blur"
               }
               ${disabled ? "bg-disabled text-dark" : ""}
