@@ -1,4 +1,4 @@
-import { isValidEmail, isValidNumber } from "@/utils";
+import { isValidEmail } from "@/utils";
 import { cloneElement, useRef, useState } from "react";
 import { BsCheckLg } from "react-icons/bs";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
@@ -18,7 +18,8 @@ export default function Input({
   const [isValid, setIsValid] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
   const [error, setError] = useState(false);
-  const [inputValue, setInputValue] = useState(0 || "");
+  const [inputValue, setInputValue] = useState("");
+  const [numberValue, setNumberValue] = useState(0);
   const [errorMessage, setErrorMessage] = useState(null);
   const inputRef = useRef();
 
@@ -34,12 +35,24 @@ export default function Input({
 
   const handleChange = (event) => {
     const newInputValue = event.target.value;
-    if (type === "email") {
-      if (newInputValue === "") {
+
+    if (type !== "number") {
+      if (newInputValue === "" && !required) {
         setIsValid(false);
         setError(false);
         setErrorMessage(null);
-      } else if (isValidEmail(newInputValue)) {
+      } else if (newInputValue === "" && required) {
+        setIsValid(false);
+        setError(true);
+        setErrorMessage("This field is required");
+      } else if (newInputValue !== "") {
+        setIsValid(true);
+        setError(false);
+        setErrorMessage(null);
+      }
+    }
+    if (type === "email") {
+      if (isValidEmail(newInputValue)) {
         setIsValid(true);
         setError(false);
         setErrorMessage(null);
@@ -47,15 +60,18 @@ export default function Input({
         setError(true);
         setErrorMessage("Email is invalid");
       }
-
-      setInputValue(newInputValue);
     }
 
     if (type === "number") {
-      if (isValidNumber(newInputValue)) {
-        setInputValue(newInputValue);
-      }
+      const newNumberValue = Number(event.target.value);
+      console.log(newNumberValue);
+
+      newNumberValue !== 0 ? setIsValid(true) : setIsValid(false);
+
+      setNumberValue(newNumberValue);
     }
+
+    setInputValue(newInputValue);
   };
 
   return (
@@ -89,7 +105,7 @@ export default function Input({
         <input
           ref={inputRef}
           type={type}
-          value={inputValue}
+          value={type === "number" ? numberValue : inputValue}
           placeholder={type === "number" ? 0 : `${placeholder}`}
           className={`${showIcon ? "pl-12" : ""}
               ${

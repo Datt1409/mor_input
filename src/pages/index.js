@@ -1,6 +1,5 @@
 import Input from "@/components/Input";
-import { BsHeart } from "react-icons/bs";
-import { AiFillAlert } from "react-icons/ai";
+import { BiSolidLockAlt } from "react-icons/bi";
 
 export default function Home() {
   return (
@@ -8,7 +7,7 @@ export default function Home() {
       <Input type="text" />
       <Input type="number" />
       <Input type="email" />
-      <Input type="password" showIcon={{ icon: <AiFillAlert /> }} />
+      <Input type="password" showIcon={{ icon: <BiSolidLockAlt /> }} />
     </main>
   );
 }
