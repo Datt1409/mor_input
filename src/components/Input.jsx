@@ -112,7 +112,7 @@ export default function Input({
             : isFocus
             ? `text-${color}`
             : !isFocus && !error && inputValue !== ""
-            ? "text-black font-bold"
+            ? "text-dark font-bold"
             : ""
         } relative text-blur text-sm`}
       >
@@ -143,7 +143,7 @@ export default function Input({
                   : isFocus
                   ? `border-${color} border-3`
                   : !isFocus && !error && inputValue !== ""
-                  ? "border-black border-2"
+                  ? "border-dark border-2"
                   : ""
               }
               ${disabled ? "bg-disabled text-dark" : ""}
