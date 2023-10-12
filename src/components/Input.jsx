@@ -5,7 +5,6 @@ import {
   validateNumberInput,
 } from "@/utils";
 import { cloneElement, useRef, useState } from "react";
-import { BsCheckLg } from "react-icons/bs";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 
@@ -24,7 +23,7 @@ export default function Input({
   const [hidePassword, setHidePassword] = useState(true);
   const [error, setError] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [numberValue, setNumberValue] = useState(0);
+  const [numberValue, setNumberValue] = useState("0");
   const [errorMessage, setErrorMessage] = useState(null);
   const inputRef = useRef();
 
@@ -40,20 +39,31 @@ export default function Input({
   };
 
   const handleIncrease = () => {
-    if (isNaN(Number(inputRef.current.value))) return;
     setIsFocus(true);
+    if (!inputRef.current.value && required) {
+      setNumberValue("1");
+      setError(false);
+      setErrorMessage(null);
+      return;
+    }
+
     setNumberValue((prev) => (Number(prev) + 1).toString());
   };
 
   const handleDecrease = () => {
-    if (isNaN(Number(inputRef.current.value))) return;
     setIsFocus(true);
+    if (!inputRef.current.value && required) {
+      setNumberValue("-1");
+      setError(false);
+      setErrorMessage(null);
+      return;
+    }
+
     setNumberValue((prev) => (Number(prev) - 1).toString());
   };
 
   const handleChange = (event) => {
     const newInputValue = event.target.value;
-
     const validateInput = (value, validationFunction, errorMessage) => {
       if (!value && required) {
         setError(true);
@@ -85,15 +95,15 @@ export default function Input({
 
     if (type === "number") {
       const newNumberValue = event.target.value;
-
       if (!validateNumberInput(newNumberValue)) return;
-
       if (newNumberValue.startsWith("0")) {
         setNumberValue("");
       } else {
         validateInput(newNumberValue, isValidNumber, "Invalid number");
         setNumberValue(newNumberValue);
       }
+
+      console.log(typeof newNumberValue);
     }
     setInputValue(newInputValue);
   };
@@ -133,8 +143,8 @@ export default function Input({
           ref={inputRef}
           type={type === "number" ? "text" : ""}
           value={type === "number" ? numberValue : inputValue}
-          placeholder={type === "number" ? 0 : `${placeholder}`}
-          className={`${showIcon ? "pl-12" : ""}
+          placeholder={type === "number" ? "0" : `${placeholder}`}
+          className={`${showIcon ? "pl-11" : ""}
               ${
                 error
                   ? "border-error border-3"
@@ -145,7 +155,7 @@ export default function Input({
                   : ""
               }
               ${disabled ? "bg-disabled text-dark" : ""}
-           border-2 w-full p-3 rounded-lg placeholder:text-blur text-base`}
+           border-2 w-full py-3 pl-3 pr-16 overflow-hidden rounded-lg placeholder:text-blur text-base`}
           onChange={handleChange}
           disabled={disabled}
           onFocus={() => setIsFocus(true)}
