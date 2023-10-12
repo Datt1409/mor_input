@@ -1,7 +1,8 @@
-import { isValidEmail } from "@/utils";
+import { isValidEmail, isValidNumber } from "@/utils";
 import { cloneElement, useRef, useState } from "react";
 import { BsCheckLg } from "react-icons/bs";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
+import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 
 export default function Input({
   type = "text",
@@ -15,7 +16,6 @@ export default function Input({
   className = "",
 }) {
   const [isFocus, setIsFocus] = useState(false);
-  const [isValid, setIsValid] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
   const [error, setError] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -24,6 +24,7 @@ export default function Input({
   const inputRef = useRef();
 
   const handleShowHide = () => {
+    setIsFocus(true);
     if (hidePassword && inputRef.current) {
       setHidePassword(false);
       inputRef.current.type = "text";
@@ -33,38 +34,69 @@ export default function Input({
     }
   };
 
+  const handleIncrease = () => {
+    if (isNaN(Number(inputRef.current.value))) return;
+    setNumberValue((prev) => (Number(prev) + 1).toString());
+    setIsFocus(true);
+  };
+
+  const handleDecrease = () => {
+    if (isNaN(Number(inputRef.current.value))) return;
+    setNumberValue((prev) => (Number(prev) - 1).toString());
+    setIsFocus(true);
+  };
+
   const handleChange = (event) => {
     const newInputValue = event.target.value;
+    console.log(event.target.value);
 
-    if (type !== "number") {
-      if (newInputValue === "" && !required) {
-        setIsValid(false);
-        setError(false);
-        setErrorMessage(null);
-      } else if (newInputValue === "" && required) {
-        setIsValid(false);
-        setError(true);
-        setErrorMessage("This field is required");
-      } else if (newInputValue !== "") {
-        setIsValid(true);
-        setError(false);
-        setErrorMessage(null);
-      }
+    if (newInputValue === "" && !required) {
+      setError(false);
+      setErrorMessage(null);
+    } else if (newInputValue === "" && required) {
+      setError(true);
+      setErrorMessage("This field is required");
+    } else if (newInputValue !== "") {
+      setError(false);
+      setErrorMessage(null);
     }
+
     if (type === "email") {
       if (isValidEmail(newInputValue)) {
-        setIsValid(true);
         setError(false);
         setErrorMessage(null);
-      } else if (!isValidEmail(newInputValue)) {
+      } else if (!isValidEmail(newInputValue) && newInputValue !== "") {
         setError(true);
         setErrorMessage("Email is invalid");
+      } else if (newInputValue === "" && !required) {
+        setError(false);
+        setErrorMessage(null);
       }
     }
 
     if (type === "number") {
-      const newNumberValue = Number(event.target.value);
-      newNumberValue !== 0 ? setIsValid(true) : setIsValid(false);
+      const newNumberValue = event.target.value;
+
+      if (newNumberValue.startsWith("0")) {
+        setNumberValue("");
+        return;
+      }
+      if (!newNumberValue && required) {
+        setError(true);
+        setErrorMessage("This field is required");
+      } else if (!newInputValue === "" && !required) {
+        setError(false);
+        setErrorMessage(null);
+      } else {
+        // Check if the value is a valid number
+        if (isValidNumber(newInputValue)) {
+          setError(false);
+          setErrorMessage(null);
+        } else if (!isValidNumber(newNumberValue)) {
+          setError(true);
+          setErrorMessage("Invalid number");
+        }
+      }
 
       setNumberValue(newNumberValue);
     }
@@ -77,10 +109,10 @@ export default function Input({
         className={`${
           error
             ? "text-error font-bold"
-            : isFocus && !isValid
+            : isFocus
             ? `text-${color}`
-            : isValid && isFocus
-            ? "text-success"
+            : !isFocus && !error && inputValue !== ""
+            ? "text-black font-bold"
             : ""
         } relative text-blur text-sm`}
       >
@@ -101,18 +133,18 @@ export default function Input({
           })}
         <input
           ref={inputRef}
-          type={type}
+          type={type === "number" ? "text" : ""}
           value={type === "number" ? numberValue : inputValue}
           placeholder={type === "number" ? 0 : `${placeholder}`}
           className={`${showIcon ? "pl-12" : ""}
               ${
                 error
                   ? "border-error border-3"
-                  : isFocus && !isValid
+                  : isFocus
                   ? `border-${color} border-3`
-                  : isFocus && isValid
-                  ? "!border-success"
-                  : "border-blur"
+                  : !isFocus && !error && inputValue !== ""
+                  ? "border-black border-2"
+                  : ""
               }
               ${disabled ? "bg-disabled text-dark" : ""}
            border-2 w-full p-3 rounded-lg placeholder:text-blur text-base`}
@@ -120,18 +152,6 @@ export default function Input({
           disabled={disabled}
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
-        />
-
-        <BsCheckLg
-          size={22}
-          className={`${
-            isValid && isFocus && !error
-              ? "rounded-full p-1 text-success absolute"
-              : "hidden"
-          }
-              ${type === "text" || type === "email" ? "right-4" : "right-10"}
-            `}
-          style={{ background: "rgba(50, 147, 111, 0.24)" }}
         />
 
         {type === "password" && hidePassword ? (
@@ -144,10 +164,27 @@ export default function Input({
           <VscEye
             size={23}
             className="absolute right-2 cursor-pointer"
-            onClick={() => handleShowHide()}
+            onClick={handleShowHide}
           />
         ) : (
           <></>
+        )}
+
+        {type === "number" && (
+          <div className="flex flex-col absolute right-2 cursor-pointer gap-1">
+            <div
+              className="text-[#83898C] bg-[#DDE2E5] flex items-center justify-center text-center w-10 border rounded-tl rounded-tr"
+              onClick={handleIncrease}
+            >
+              <AiFillCaretUp size={16} />
+            </div>
+            <div
+              className="text-[#83898C] bg-[#DDE2E5]  flex items-center text-center justify-center w-10 border rounded-bl rounded-br"
+              onClick={handleDecrease}
+            >
+              <AiFillCaretDown size={16} />
+            </div>
+          </div>
         )}
       </div>
       <p className={`${errorMessage ? "text-error font-bold" : "hidden"}`}>

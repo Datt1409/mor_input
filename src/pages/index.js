@@ -4,10 +4,14 @@ import { BiSolidLockAlt } from "react-icons/bi";
 export default function Home() {
   return (
     <main className="w-screen min-h-screen flex flex-col items-center justify-center gap-5">
-      <Input type="text" />
-      <Input type="number" />
-      <Input type="email" />
-      <Input type="password" showIcon={{ icon: <BiSolidLockAlt /> }} />
+      <Input type="text" hint="Text only" required />
+      <Input type="number" hint="Number only" required />
+      <Input type="email" hint="Email only" />
+      <Input
+        type="password"
+        showIcon={{ icon: <BiSolidLockAlt /> }}
+        hint="Password must be at least 8 Characters and must contain at least a Capital Letter, a Number and a Special Character."
+      />
     </main>
   );
 }

@@ -3,8 +3,8 @@ export const isValidEmail = (email) => {
   return emailRegex.test(email);
 };
 
-// export const isValidNumber = (number) => {
-//   const numberRegex =
-//     /^[-+]?(\d+(\.\d*)?|\.\d+|(\d+)?e\d+(\.\d*)?|\d+(\.\d*)?e\d+)$/;
-//   return numberRegex.test(number);
-// };
+export const isValidNumber = (number) => {
+  const numberRegex =
+    /^[-+]?(\d+(\.\d*)?|\.\d+|(\d+)?e\d+(\.\d*)?|\d+(\.\d*)?e\d+)$/;
+  return numberRegex.test(number);
+};
