@@ -6,7 +6,7 @@ export default function Home() {
     <main className="w-screen min-h-screen flex flex-col items-center justify-center gap-5">
       <Input type="text" hint="Text only" required />
       <Input type="number" hint="Number only" required />
-      <Input type="email" hint="Email only" />
+      <Input type="email" hint="Email only" required />
       <Input
         type="password"
         showIcon={{ icon: <BiSolidLockAlt /> }}

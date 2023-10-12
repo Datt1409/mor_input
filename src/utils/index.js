@@ -8,3 +8,13 @@ export const isValidNumber = (number) => {
     /^[-+]?(\d+(\.\d*)?|\.\d+|(\d+)?e\d+(\.\d*)?|\d+(\.\d*)?e\d+)$/;
   return numberRegex.test(number);
 };
+
+export const isValidPassword = (password) => {
+  const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+  return passwordRegex.test(password);
+};
+
+export const validateNumberInput = (number) => {
+  const numberRegex = /^[0-9e,.\-+]*$/;
+  return numberRegex.test(number);
+};

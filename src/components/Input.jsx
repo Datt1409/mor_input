@@ -1,4 +1,9 @@
-import { isValidEmail, isValidNumber } from "@/utils";
+import {
+  isValidEmail,
+  isValidNumber,
+  isValidPassword,
+  validateNumberInput,
+} from "@/utils";
 import { cloneElement, useRef, useState } from "react";
 import { BsCheckLg } from "react-icons/bs";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
@@ -36,75 +41,66 @@ export default function Input({
 
   const handleIncrease = () => {
     if (isNaN(Number(inputRef.current.value))) return;
-    setNumberValue((prev) => (Number(prev) + 1).toString());
     setIsFocus(true);
+    setNumberValue((prev) => (Number(prev) + 1).toString());
   };
 
   const handleDecrease = () => {
     if (isNaN(Number(inputRef.current.value))) return;
-    setNumberValue((prev) => (Number(prev) - 1).toString());
     setIsFocus(true);
+    setNumberValue((prev) => (Number(prev) - 1).toString());
   };
 
   const handleChange = (event) => {
     const newInputValue = event.target.value;
-    console.log(event.target.value);
 
-    if (newInputValue === "" && !required) {
-      setError(false);
-      setErrorMessage(null);
-    } else if (newInputValue === "" && required) {
+    const validateInput = (value, validationFunction, errorMessage) => {
+      if (!value && required) {
+        setError(true);
+        setErrorMessage("This field is required");
+      } else if (value && !validationFunction(value)) {
+        setError(true);
+        setErrorMessage(errorMessage);
+      } else {
+        setError(false);
+        setErrorMessage(null);
+      }
+    };
+
+    if (!newInputValue && required) {
       setError(true);
       setErrorMessage("This field is required");
-    } else if (newInputValue !== "") {
+    } else {
       setError(false);
       setErrorMessage(null);
     }
 
     if (type === "email") {
-      if (isValidEmail(newInputValue)) {
-        setError(false);
-        setErrorMessage(null);
-      } else if (!isValidEmail(newInputValue) && newInputValue !== "") {
-        setError(true);
-        setErrorMessage("Email is invalid");
-      } else if (newInputValue === "" && !required) {
-        setError(false);
-        setErrorMessage(null);
-      }
+      validateInput(newInputValue, isValidEmail, "Email is invalid");
+    }
+
+    if (type === "password") {
+      validateInput(newInputValue, isValidPassword, "Invalid password");
     }
 
     if (type === "number") {
       const newNumberValue = event.target.value;
 
+      if (!validateNumberInput(newNumberValue)) return;
+
       if (newNumberValue.startsWith("0")) {
         setNumberValue("");
-        return;
-      }
-      if (!newNumberValue && required) {
-        setError(true);
-        setErrorMessage("This field is required");
-      } else if (!newInputValue === "" && !required) {
-        setError(false);
-        setErrorMessage(null);
       } else {
-        // Check if the value is a valid number
-        if (isValidNumber(newInputValue)) {
-          setError(false);
-          setErrorMessage(null);
-        } else if (!isValidNumber(newNumberValue)) {
-          setError(true);
-          setErrorMessage("Invalid number");
-        }
+        validateInput(newNumberValue, isValidNumber, "Invalid number");
+        setNumberValue(newNumberValue);
       }
-
-      setNumberValue(newNumberValue);
     }
     setInputValue(newInputValue);
   };
 
   return (
     <div className={`w-96 flex flex-col gap-3 ${className}`}>
+      {/* Label */}
       <div
         className={`${
           error
@@ -125,6 +121,8 @@ export default function Input({
           *
         </span>
       </div>
+
+      {/* Input */}
       <div className="flex flex-row items-center w-full gap-3 relative">
         {showIcon &&
           cloneElement(showIcon.icon, {
@@ -187,10 +185,20 @@ export default function Input({
           </div>
         )}
       </div>
-      <p className={`${errorMessage ? "text-error font-bold" : "hidden"}`}>
+
+      {/* Error message */}
+      <p className={`${errorMessage ? "text-error" : "hidden"}`}>
         {errorMessage}
       </p>
-      <p className={`${error ? "text-error" : "text-blur"} text-xs`}>{hint}</p>
+
+      {/* Hint */}
+      {errorMessage ? (
+        <></>
+      ) : (
+        <p className={`${error ? "text-error" : "text-blur"} text-xs`}>
+          {hint}
+        </p>
+      )}
     </div>
   );
 }
