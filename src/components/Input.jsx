@@ -39,26 +39,24 @@ export default function Input({
   };
 
   const handleIncrease = () => {
-    setIsFocus(true);
     if (!inputRef.current.value && required) {
       setNumberValue("1");
       setError(false);
       setErrorMessage(null);
       return;
     }
-
+    setIsFocus(true);
     setNumberValue((prev) => (Number(prev) + 1).toString());
   };
 
   const handleDecrease = () => {
-    setIsFocus(true);
     if (!inputRef.current.value && required) {
       setNumberValue("-1");
       setError(false);
       setErrorMessage(null);
       return;
     }
-
+    setIsFocus(true);
     setNumberValue((prev) => (Number(prev) - 1).toString());
   };
 
