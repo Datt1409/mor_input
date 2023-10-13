@@ -230,7 +230,9 @@ export default function Input({
         )}
       </div>
 
-      {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
+      {type === "password" && errorMessage && (
+        <p className="text-error text-xs">{hint}</p>
+      )}
 
       {!errorMessage && (
         <p className={`text-${error ? "error" : "blur"} text-xs`}>{hint}</p>
