@@ -1,6 +1,7 @@
 import Input from "@/components/Input";
 import { AiOutlineNumber } from "react-icons/ai";
 import { BiSolidLockAlt } from "react-icons/bi";
+import { HiOutlineBan } from "react-icons/hi";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
         showIcon={{ icon: <BiSolidLockAlt /> }}
         hint="Password must be at least 8 Characters and must contain at least a Capital Letter, a Number and a Special Character."
       />
+      <Input type="text" disabled showIcon={{ icon: <HiOutlineBan /> }} />
     </main>
   );
 }

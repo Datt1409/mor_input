@@ -151,8 +151,10 @@ export default function Input({
             : ""
         } relative text-blur text-sm cursor-pointer`}
         onClick={() => {
-          setIsFocus(true);
-          inputRef.current?.focus();
+          if (!disabled) {
+            setIsFocus(true);
+            inputRef.current?.focus();
+          }
         }}
       >
         {label}
@@ -179,7 +181,9 @@ export default function Input({
           ref={inputRef}
           type={type === "number" ? "text" : `${type}`}
           value={type === "number" ? numberValue : inputValue}
-          placeholder={type === "number" ? "0" : `${placeholder}`}
+          placeholder={
+            type === "number" ? "0" : disabled ? "" : `${placeholder}`
+          }
           className={`${showIcon ? "pl-11" : "pl-3"}
               ${
                 error
