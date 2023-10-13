@@ -177,7 +177,7 @@ export default function Input({
                   : ""
               }
               ${disabled ? "bg-disabled text-dark" : ""}
-           border-2 w-full py-3 pr-16 overflow-hidden rounded-lg placeholder:text-blur text-base`}
+           border-2 w-full py-3 pr-14 overflow-hidden rounded-lg placeholder:text-blur text-base`}
           onChange={handleChange}
           disabled={disabled}
           onFocus={() => setIsFocus(true)}
