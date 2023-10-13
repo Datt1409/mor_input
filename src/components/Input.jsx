@@ -4,7 +4,7 @@ import {
   isValidPassword,
   validateNumberInput,
 } from "@/utils";
-import { cloneElement, useRef, useState } from "react";
+import { cloneElement, useEffect, useRef, useState } from "react";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 
@@ -26,6 +26,8 @@ export default function Input({
   const [numberValue, setNumberValue] = useState("0");
   const [errorMessage, setErrorMessage] = useState(null);
   const inputRef = useRef();
+  const inputContainerRef = useRef();
+  const labelRef = useRef();
 
   const handleShowHide = () => {
     setIsFocus(true);
@@ -106,19 +108,38 @@ export default function Input({
     setInputValue(newInputValue);
   };
 
+  useEffect(() => {
+    const clickOutside = (e) => {
+      if (
+        inputContainerRef.current &&
+        !inputContainerRef.current.contains(e.target) &&
+        e.target !== labelRef.current
+      ) {
+        console.log("e.target", e.target);
+        console.log(labelRef.current)
+        setIsFocus(false);
+      }
+    };
+
+    document.addEventListener("mousedown", clickOutside);
+
+    return () => document.removeEventListener("mousedown", clickOutside);
+  }, []);
+
   return (
     <div className={`w-96 flex flex-col gap-3 ${className}`}>
       {/* Label */}
       <div
+        ref={labelRef}
         className={`${
           error
-            ? "text-error font-bold"
+            ? "text-error"
             : isFocus
             ? `text-${color}`
             : !isFocus && !error && inputValue !== ""
-            ? "text-dark font-bold"
+            ? "text-dark"
             : ""
-        } relative text-blur text-sm`}
+        } relative text-blur text-sm cursor-pointer`}
       >
         {label}
         <span
@@ -131,7 +152,10 @@ export default function Input({
       </div>
 
       {/* Input */}
-      <div className="flex flex-row items-center w-full gap-3 relative">
+      <div
+        ref={inputContainerRef}
+        className="flex flex-row items-center w-full gap-3 relative"
+      >
         {showIcon &&
           cloneElement(showIcon.icon, {
             size: 24,
@@ -145,9 +169,9 @@ export default function Input({
           className={`${showIcon ? "pl-11" : ""}
               ${
                 error
-                  ? "border-error border-3"
+                  ? "border-error"
                   : isFocus
-                  ? `border-${color} border-3`
+                  ? `border-${color}`
                   : !isFocus && !error && inputValue !== ""
                   ? "border-dark border-2"
                   : ""
@@ -194,18 +218,10 @@ export default function Input({
         )}
       </div>
 
-      {/* Error message */}
-      <p className={`${errorMessage ? "text-error" : "hidden"}`}>
-        {errorMessage}
-      </p>
+      {errorMessage && <p className="text-error text-xs">{errorMessage}</p>}
 
-      {/* Hint */}
-      {errorMessage ? (
-        <></>
-      ) : (
-        <p className={`${error ? "text-error" : "text-blur"} text-xs`}>
-          {hint}
-        </p>
+      {!errorMessage && (
+        <p className={`text-${error ? "error" : "blur"} text-xs`}>{hint}</p>
       )}
     </div>
   );
