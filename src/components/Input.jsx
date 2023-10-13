@@ -31,7 +31,6 @@ export default function Input({
 
   const handleShowHide = () => {
     setIsFocus(true);
-    setHidePassword(!hidePassword);
     if (hidePassword && inputRef.current) {
       setHidePassword(false);
       inputRef.current.type = "text";
@@ -177,7 +176,7 @@ export default function Input({
           })}
         <input
           ref={inputRef}
-          type={type === "number" ? "text" : ""}
+          type={type === "number" ? "text" : `${type}`}
           value={type === "number" ? numberValue : inputValue}
           placeholder={type === "number" ? "0" : `${placeholder}`}
           className={`${showIcon ? "pl-11" : "pl-3"}
@@ -198,21 +197,20 @@ export default function Input({
           onBlur={() => setIsFocus(false)}
         />
 
-        {type === "password" && hidePassword ? (
-          <VscEyeClosed
-            size={23}
-            className="absolute right-2 cursor-pointer"
-            onClick={() => handleShowHide()}
-          />
-        ) : type === "password" && !hidePassword ? (
-          <VscEye
-            size={23}
-            className="absolute right-2 cursor-pointer"
-            onClick={handleShowHide}
-          />
-        ) : (
-          <></>
-        )}
+        {type === "password" &&
+          (hidePassword ? (
+            <VscEyeClosed
+              size={23}
+              className="absolute right-2 cursor-pointer"
+              onClick={handleShowHide}
+            />
+          ) : (
+            <VscEye
+              size={23}
+              className="absolute right-2 cursor-pointer"
+              onClick={handleShowHide}
+            />
+          ))}
 
         {type === "number" && (
           <div className="flex flex-col absolute right-2 cursor-pointer gap-1">
