@@ -48,9 +48,10 @@ export default function Input({
       setErrorMessage(null);
       return;
     }
-
-    const inputValue = parseFloat(inputRef.current.value);
-    if (!isNaN(inputValue) && isFinite(inputValue)) {
+    if (
+      !isNaN(Number(inputRef.current.value)) &&
+      isFinite(Number(inputRef.current.value))
+    ) {
       setNumberValue((prev) => (Number(prev) + 1).toString());
       setError(false);
       setErrorMessage(null);
@@ -65,9 +66,10 @@ export default function Input({
       setErrorMessage(null);
       return;
     }
-    const inputValue = parseFloat(inputRef.current.value);
-
-    if (!isNaN(inputValue) && isFinite(inputValue)) {
+    if (
+      !isNaN(Number(inputRef.current.value)) &&
+      isFinite(Number(inputRef.current.value))
+    ) {
       setNumberValue((prev) => (Number(prev) - 1).toString());
       setError(false);
       setErrorMessage(null);
@@ -229,13 +231,15 @@ export default function Input({
         )}
       </div>
 
-      {type === "password" && errorMessage ? (
-        <p className="text-error text-xs">{hint}</p>
+      {errorMessage ? (
+        <p
+          className={`text-${
+            type === "password" && error ? "error" : "error"
+          } text-xs`}
+        >
+          {type === "password" ? hint : errorMessage}
+        </p>
       ) : (
-        <p className="text-error text-xs">{errorMessage}</p>
-      )}
-
-      {!errorMessage && (
         <p className={`text-${error ? "error" : "blur"} text-xs`}>{hint}</p>
       )}
     </div>
