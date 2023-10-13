@@ -116,7 +116,7 @@ export default function Input({
         e.target !== labelRef.current
       ) {
         console.log("e.target", e.target);
-        console.log(labelRef.current)
+        console.log(labelRef.current);
         setIsFocus(false);
       }
     };
@@ -166,7 +166,7 @@ export default function Input({
           type={type === "number" ? "text" : ""}
           value={type === "number" ? numberValue : inputValue}
           placeholder={type === "number" ? "0" : `${placeholder}`}
-          className={`${showIcon ? "pl-11" : ""}
+          className={`${showIcon ? "pl-11" : "pl-3"}
               ${
                 error
                   ? "border-error"
@@ -177,7 +177,7 @@ export default function Input({
                   : ""
               }
               ${disabled ? "bg-disabled text-dark" : ""}
-           border-2 w-full py-3 pl-3 pr-16 overflow-hidden rounded-lg placeholder:text-blur text-base`}
+           border-2 w-full py-3 pr-16 overflow-hidden rounded-lg placeholder:text-blur text-base`}
           onChange={handleChange}
           disabled={disabled}
           onFocus={() => setIsFocus(true)}
