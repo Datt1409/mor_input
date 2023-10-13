@@ -41,25 +41,33 @@ export default function Input({
   };
 
   const handleIncrease = () => {
+    setIsFocus(true);
     if (!inputRef.current.value && required) {
       setNumberValue("1");
       setError(false);
       setErrorMessage(null);
       return;
     }
-    setIsFocus(true);
-    setNumberValue((prev) => (Number(prev) + 1).toString());
+    if (!isNaN(Number(inputRef.current.value))) {
+      setNumberValue((prev) => (Number(prev) + 1).toString());
+      setError(false);
+      setErrorMessage(null);
+    }
   };
 
   const handleDecrease = () => {
+    setIsFocus(true);
     if (!inputRef.current.value && required) {
       setNumberValue("-1");
       setError(false);
       setErrorMessage(null);
       return;
     }
-    setIsFocus(true);
-    setNumberValue((prev) => (Number(prev) - 1).toString());
+    if (!isNaN(Number(inputRef.current.value))) {
+      setNumberValue((prev) => (Number(prev) - 1).toString());
+      setError(false);
+      setErrorMessage(null);
+    }
   };
 
   const handleChange = (event) => {
@@ -95,7 +103,8 @@ export default function Input({
 
     if (type === "number") {
       const newNumberValue = event.target.value;
-      if (!validateNumberInput(newNumberValue)) return;
+      if (!validateNumberInput(newNumberValue) || newNumberValue === "NaN")
+        return;
       if (newNumberValue.startsWith("0")) {
         setNumberValue("");
       } else {
@@ -140,6 +149,10 @@ export default function Input({
             ? "text-dark"
             : ""
         } relative text-blur text-sm cursor-pointer`}
+        onClick={() => {
+          setIsFocus(true);
+          inputRef.current?.focus();
+        }}
       >
         {label}
         <span
