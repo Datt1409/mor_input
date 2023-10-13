@@ -31,13 +31,7 @@ export default function Input({
 
   const handleShowHide = () => {
     setIsFocus(true);
-    if (hidePassword && inputRef.current) {
-      setHidePassword(false);
-      inputRef.current.type = "text";
-    } else {
-      setHidePassword(true);
-      inputRef.current.type = "password";
-    }
+    setHidePassword(!hidePassword);
   };
 
   const handleIncrease = () => {
@@ -116,6 +110,16 @@ export default function Input({
     }
     setInputValue(newInputValue);
   };
+
+  useEffect(() => {
+    if (hidePassword && inputRef.current) {
+      setHidePassword(false);
+      inputRef.current.type = "text";
+    } else {
+      setHidePassword(true);
+      inputRef.current.type = "password";
+    }
+  }, [inputRef.current, hidePassword]);
 
   useEffect(() => {
     const clickOutside = (e) => {
