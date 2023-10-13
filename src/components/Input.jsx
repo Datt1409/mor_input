@@ -48,7 +48,9 @@ export default function Input({
       setErrorMessage(null);
       return;
     }
-    if (!isNaN(Number(inputRef.current.value))) {
+
+    const inputValue = parseFloat(inputRef.current.value);
+    if (!isNaN(inputValue) && isFinite(inputValue)) {
       setNumberValue((prev) => (Number(prev) + 1).toString());
       setError(false);
       setErrorMessage(null);
@@ -63,7 +65,9 @@ export default function Input({
       setErrorMessage(null);
       return;
     }
-    if (!isNaN(Number(inputRef.current.value))) {
+    const inputValue = parseFloat(inputRef.current.value);
+
+    if (!isNaN(inputValue) && isFinite(inputValue)) {
       setNumberValue((prev) => (Number(prev) - 1).toString());
       setError(false);
       setErrorMessage(null);
@@ -103,16 +107,13 @@ export default function Input({
 
     if (type === "number") {
       const newNumberValue = event.target.value;
-      if (!validateNumberInput(newNumberValue) || newNumberValue === "NaN")
-        return;
+      if (!validateNumberInput(newNumberValue)) return;
       if (newNumberValue.startsWith("0")) {
         setNumberValue("");
       } else {
         validateInput(newNumberValue, isValidNumber, "Invalid number");
         setNumberValue(newNumberValue);
       }
-
-      console.log(typeof newNumberValue);
     }
     setInputValue(newInputValue);
   };
@@ -124,8 +125,6 @@ export default function Input({
         !inputContainerRef.current.contains(e.target) &&
         e.target !== labelRef.current
       ) {
-        console.log("e.target", e.target);
-        console.log(labelRef.current);
         setIsFocus(false);
       }
     };
@@ -230,8 +229,10 @@ export default function Input({
         )}
       </div>
 
-      {type === "password" && errorMessage && (
+      {type === "password" && errorMessage ? (
         <p className="text-error text-xs">{hint}</p>
+      ) : (
+        <p className="text-error text-xs">{errorMessage}</p>
       )}
 
       {!errorMessage && (
