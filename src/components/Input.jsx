@@ -4,7 +4,7 @@ import {
   isValidPassword,
   validateNumberInput,
 } from "@/utils";
-import { cloneElement, useEffect, useRef, useState } from "react";
+import { cloneElement, useEffect, useMemo, useRef, useState } from "react";
 import { VscEyeClosed, VscEye } from "react-icons/vsc";
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
 
@@ -29,6 +29,33 @@ export default function Input({
   const inputContainerRef = useRef();
   const labelRef = useRef();
 
+  const statusClassName = useMemo(() => {
+    if (error) {
+      return "border-error";
+    }
+    if (isFocus) {
+      return `border-${color}`;
+    }
+
+    if (!!inputValue || !!+numberValue) {
+      return "border-dark border-2";
+    }
+    return "";
+  }, [error, isFocus, inputValue, color, numberValue]);
+
+  const labelStatusClassName = useMemo(() => {
+    if (error) {
+      return "text-error";
+    }
+    if (isFocus) {
+      return `text-${color}`;
+    }
+    if (!!inputValue || !!+numberValue) {
+      return "text-dark";
+    }
+    return "";
+  }, [error, isFocus, inputValue, color, numberValue]);
+
   const handleShowHide = () => {
     setIsFocus(true);
     if (hidePassword && inputRef.current) {
@@ -41,9 +68,11 @@ export default function Input({
   };
 
   const handleIncrease = () => {
+    console.log(numberValue);
     setIsFocus(true);
     if (!inputRef.current.value && required) {
       setNumberValue("1");
+      // console.log(numberValue);
       setError(false);
       setErrorMessage(null);
       return;
@@ -76,6 +105,15 @@ export default function Input({
     }
   };
 
+  const handleBlur = () => {
+    setIsFocus(false);
+    if ((!isFocus && required && !inputValue) || !+numberValue) {
+      inputRef.current.style.border = "2px solid #f57e77";
+      labelRef.current.style.color = "#f57e77";
+      setError(true);
+      setErrorMessage("This field is required");
+    }
+  };
   const handleChange = (event) => {
     const newInputValue = event.target.value;
     const validateInput = (value, validationFunction, errorMessage) => {
@@ -141,15 +179,7 @@ export default function Input({
       {/* Label */}
       <div
         ref={labelRef}
-        className={`${
-          error
-            ? "text-error"
-            : isFocus
-            ? `text-${color}`
-            : !isFocus && !error && inputValue !== ""
-            ? "text-dark"
-            : ""
-        } relative text-blur text-sm cursor-pointer`}
+        className={`${labelStatusClassName} relative text-blur text-sm cursor-pointer`}
         onClick={() => {
           if (!disabled) {
             setIsFocus(true);
@@ -185,21 +215,13 @@ export default function Input({
             type === "number" ? "0" : disabled ? "" : `${placeholder}`
           }
           className={`${showIcon ? "pl-11" : "pl-3"}
-              ${
-                error
-                  ? "border-error"
-                  : isFocus
-                  ? `border-${color}`
-                  : !isFocus && !error && inputValue !== ""
-                  ? "border-dark border-2"
-                  : ""
-              }
+              ${statusClassName}
               ${disabled ? "bg-disabled text-dark" : ""}
            border-2 w-full py-3 pr-14 overflow-hidden rounded-lg placeholder:text-blur text-base`}
           onChange={handleChange}
           disabled={disabled}
           onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
+          onBlur={() => handleBlur()}
         />
 
         {type === "password" &&
